@@ -8,21 +8,37 @@ ApplicationWindow {
     height: 480
     title: qsTr("Hello World")
 
+    Loader {
+        id: pageLoader
+        source: "hello.qml"
+        //anchors.fill: parent
+        anchors.centerIn: parent
+    }
+
+    function setSource(sorsa) {
+        pageLoader.source = sorsa
+    }
+
+
     menuBar: MenuBar {
+
+
         Menu {
             title: qsTr("View")
             MenuItem {
                 text: qsTr("Map")
-                onTriggered: Qt.quit();
+                onTriggered: setSource("map.qml")
             }
             MenuItem {
                 text: qsTr("Locations")
+
             }
         }
         Menu {
             title: qsTr("Add")
             MenuItem {
                 text: qsTr("Location")
+                onTriggered: setSource("newLocation.qml")
             }
         }
         Menu {
@@ -34,10 +50,5 @@ ApplicationWindow {
                 text: qsTr("Register")
             }
         }
-    }
-
-    Text {
-        text: qsTr("Hello World")
-        anchors.centerIn: parent
     }
 }
