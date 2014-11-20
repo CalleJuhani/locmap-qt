@@ -3,7 +3,8 @@ TEMPLATE = app
 QT += qml quick widgets
 QT += positioning
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    network.cpp
 
 RESOURCES += qml.qrc
 
@@ -12,3 +13,6 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
+
+HEADERS += \
+    network.h
