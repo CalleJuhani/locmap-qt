@@ -1,8 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>map.qml</file>
-        <file>newLocation.qml</file>
-        <file>hello.qml</file>
+        <file>content/Locations.qml</file>
+        <file>content/Users.qml</file>
     </qresource>
 </RCC>

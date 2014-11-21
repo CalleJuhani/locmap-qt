@@ -1,54 +1,38 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick 2.1
+import QtQuick.Controls 1.0
 import QtPositioning 5.2
+import QtQuick.Layouts 1.0
+import "content"
 
 ApplicationWindow {
+    id: root
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: "Locmap"
 
-    Loader {
-        id: pageLoader
-        source: "hello.qml"
-        //anchors.fill: parent
-        anchors.centerIn: parent
-    }
+    TabView {
+        id:tabs
+        anchors.fill: parent
 
-    function setSource(sorsa) {
-        pageLoader.source = sorsa
-    }
-
-
-    menuBar: MenuBar {
-
-
-        Menu {
-            title: qsTr("View")
-            MenuItem {
-                text: qsTr("Map")
-                onTriggered: setSource("map.qml")
-            }
-            MenuItem {
-                text: qsTr("Locations")
-
-            }
+        Tab {
+            id: locationsPage
+            title: "Locations"
+            Locations {}
         }
-        Menu {
-            title: qsTr("Add")
-            MenuItem {
-                text: qsTr("Location")
-                onTriggered: setSource("newLocation.qml")
-            }
+        Tab {
+            id: collectionsPage
+            title: "Collections"
         }
-        Menu {
-            title: qsTr("User")
-            MenuItem {
-                text: qsTr("Log in")
-            }
-            MenuItem {
-                text: qsTr("Register")
-            }
+        Tab {
+            id: usersPage
+            title: "Users"
+            Users {}
+        }
+        Tab {
+            id: imagesPage
+            title: "Images"
         }
     }
+
 }
