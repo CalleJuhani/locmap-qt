@@ -60,7 +60,7 @@ Item {
             }
         }*/
 
-        TableView{
+        TableView {
             //model: dummyModel
             id: usersTable
             Layout.fillHeight: true
