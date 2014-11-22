@@ -39,13 +39,10 @@ Item {
                 }
             }
 
-            ListModel {
+            JSONListModel {
                 id: imagesModel
-                Component.onCompleted: {
-                    for (var i = 0 ; i < 10 ; ++i) {
-                        append({"id": i, "location": "location" + i})
-                    }
-                }
+                source: "http://api.locmap.net/v1/images"
+                query: "$.[*]"
             }
 
             TableView {
@@ -56,11 +53,11 @@ Item {
 
                 model: SortFilterProxyModel {
                     id: proxyModel
-                    source: imagesModel.count > 0 ? imagesModel : null
+                    source: imagesModel.model.count > 0 ? imagesModel.model : null
 
                     sortOrder: imagesTable.sortIndicatorOrder
                     sortCaseSensitivity: Qt.CaseInsensitive
-                    sortRole: imagesModel.count > 0 ?
+                    sortRole: imagesModel.model.count > 0 ?
                                   imagesTable.getColumn(imagesTable.sortIndicatorColumn).role : ""
 
                     filterString: "*" + "" + "*"
@@ -69,7 +66,7 @@ Item {
                 }
 
                 TableViewColumn {
-                    role: "id"
+                    role: "_id"
                     title: "ObjectId"
                     width: 120
                 }
@@ -77,6 +74,14 @@ Item {
                     role: "location"
                     title: "Location"
                     width: 120
+                }
+                TableViewColumn {
+                    role: "created_at"
+                    title: "Created"
+                }
+                TableViewColumn {
+                    role: "owner"
+                    title: "Owner"
                 }
             }
 
@@ -86,7 +91,7 @@ Item {
             width: parent.width / 2
             id: image
             fillMode: Image.PreserveAspectFit
-            source: "http://api.locmap.net/v1/images/546a3d8902b1e88925eb6890"
+            source: imagesTable.currentRow !== -1 ? "http://api.locmap.net/v1/images/" + proxyModel.get(imagesTable.currentRow)._id : ""
 
             BusyIndicator {
                 running: image.status === Image.Loading

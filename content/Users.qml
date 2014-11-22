@@ -41,34 +41,13 @@ Item {
             }
         }
 
-        /*XmlListModel {
-            id: usersModel
-            source: "http://student.labranet.jamk.fi/~G2481/qt/users.xml"
-            query: "/users/user"
-
-            XmlRole { name: "id"; query: "id/string()" }
-            XmlRole { name: "username"; query: "username/string()" }
-            XmlRole { name: "email"; query: "email/string()" }
-        }*/
-
         JSONListModel {
             id: jsonModel1
             source: "http://api.locmap.net/v1/users"
-            // All books in the store object
             query: "$.[*]"
         }
 
-        /*ListModel {
-            id: usersModel
-            Component.onCompleted: {
-                for (var i = 0 ; i < 100 ; ++i) {
-                    append({"id": i, "username": "user" + i, "email": "gg@gg.com"})
-                }
-            }
-        }*/
-
         TableView {
-            //model: dummyModel
             id: usersTable
             Layout.fillHeight: true
             Layout.fillWidth: true
