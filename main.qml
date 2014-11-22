@@ -32,6 +32,7 @@ ApplicationWindow {
         Tab {
             id: imagesPage
             title: "Images"
+            Images {}
         }
     }
 

@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>content/Locations.qml</file>
         <file>content/Users.qml</file>
+        <file>content/Images.qml</file>
     </qresource>
 </RCC>
