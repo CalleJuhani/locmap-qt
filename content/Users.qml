@@ -41,7 +41,7 @@ Item {
             }
         }
 
-        XmlListModel {
+        /*XmlListModel {
             id: usersModel
             source: "http://student.labranet.jamk.fi/~G2481/qt/users.xml"
             query: "/users/user"
@@ -49,6 +49,13 @@ Item {
             XmlRole { name: "id"; query: "id/string()" }
             XmlRole { name: "username"; query: "username/string()" }
             XmlRole { name: "email"; query: "email/string()" }
+        }*/
+
+        JSONListModel {
+            id: jsonModel1
+            source: "http://api.locmap.net/v1/users"
+            // All books in the store object
+            query: "$.[*]"
         }
 
         /*ListModel {
@@ -69,11 +76,11 @@ Item {
 
             model: SortFilterProxyModel {
                 id: proxyModel
-                source: usersModel.count > 0 ? usersModel : null
+                source: jsonModel1.model.count > 0 ? jsonModel1.model : null
 
                 sortOrder: usersTable.sortIndicatorOrder
                 sortCaseSensitivity: Qt.CaseInsensitive
-                sortRole: usersModel.count > 0 ?
+                sortRole: jsonModel1.model.count > 0 ?
                           usersTable.getColumn(usersTable.sortIndicatorColumn).role : ""
 
                 filterString: "*" + idSearch.text + "*"
@@ -82,19 +89,24 @@ Item {
             }
 
             TableViewColumn {
-                role: "id"
+                role: "_id"
                 title: "ObjectId"
-                width: 120
             }
             TableViewColumn {
                 role: "username"
                 title: "Username"
-                width: 120
             }
             TableViewColumn {
                 role: "email"
                 title: "Email"
-                width: 120
+            }
+            TableViewColumn {
+                role: "created_at"
+                title: "Created"
+            }
+            TableViewColumn {
+                role: "updated_at"
+                title: "Updated"
             }
         }
 

@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>content/JSONListModel.qml</file>
+        <file>content/jsonpath.js</file>
         <file>content/Locations.qml</file>
         <file>content/Users.qml</file>
         <file>content/Images.qml</file>
