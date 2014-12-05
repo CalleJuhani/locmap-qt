@@ -1,10 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+        <file>Main.qml</file>
         <file>content/JSONListModel.qml</file>
         <file>content/jsonpath.js</file>
         <file>content/Locations.qml</file>
         <file>content/Users.qml</file>
         <file>content/Images.qml</file>
+        <file>content/Login.qml</file>
+        <file>content/network.js</file>
     </qresource>
 </RCC>

@@ -11,6 +11,6 @@ int main(int argc, char *argv[])
     //Network* nw = new Network();
     qmlRegisterType<SortFilterProxyModel>("SortFilterProxyModel", 0, 1, "SortFilterProxyModel");
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
     return app.exec();
 }
