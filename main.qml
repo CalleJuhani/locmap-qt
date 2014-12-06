@@ -38,7 +38,7 @@ ApplicationWindow {
 
         Tab {
             id: usersPage
-            enabled: false
+            enabled: true
             title: "Users"
             Users {}
         }

@@ -3,16 +3,30 @@ import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 import SortFilterProxyModel 0.1
 import QtQuick.XmlListModel 2.0
+import "network.js" as NetworkApi
 
 Item {
     id:users
     anchors.fill: parent
     anchors.margins: 8
 
+
+    function updateUserListModel() {
+        NetworkApi.getUsers(function(users) {
+            userListModel.clear();
+            users.forEach(function(e) {
+                userListModel.append({_id: e._id, username: e.username, email: e.email, created_at: e.created_at});
+            });
+        });
+    }
+
+
     ColumnLayout {
         id: mainLayout
         anchors.fill: parent
 
+
+        //Search components
         GroupBox {
             id: gridBox
             title: "Search users"
@@ -29,8 +43,8 @@ Item {
                 Label { text: "Email:" }
 
                 TextField {
-                 id: idSearch
-                 Layout.fillWidth: true
+                    id: idSearch
+                    Layout.fillWidth: true
                 }
                 TextField {
                     Layout.fillWidth: true
@@ -41,31 +55,12 @@ Item {
             }
         }
 
-        JSONListModel {
-            id: jsonModel1
-            source: "http://api.locmap.net/v1/users"
-            query: "$.[*]"
-        }
 
         TableView {
             id: usersTable
             Layout.fillHeight: true
             Layout.fillWidth: true
             sortIndicatorVisible: true
-
-            model: SortFilterProxyModel {
-                id: proxyModel
-                source: jsonModel1.model.count > 0 ? jsonModel1.model : null
-
-                sortOrder: usersTable.sortIndicatorOrder
-                sortCaseSensitivity: Qt.CaseInsensitive
-                sortRole: jsonModel1.model.count > 0 ?
-                          usersTable.getColumn(usersTable.sortIndicatorColumn).role : ""
-
-                filterString: "*" + idSearch.text + "*"
-                filterSyntax: SortFilterProxyModel.Wildcard
-                filterCaseSensitivity: Qt.CaseInsensitive
-            }
 
             TableViewColumn {
                 role: "_id"
@@ -87,8 +82,32 @@ Item {
                 role: "updated_at"
                 title: "Updated"
             }
+
+            model: SortFilterProxyModel {
+                id: proxyModel
+                source: userListModel.count > 0 ? userListModel : null
+
+                sortOrder: usersTable.sortIndicatorOrder
+                sortCaseSensitivity: Qt.CaseInsensitive
+                sortRole: userListModel.count > 0 ?
+                          usersTable.getColumn(usersTable.sortIndicatorColumn).role : ""
+
+                filterRole: ""
+                filterString: "*" + idSearch.text + "*"
+                filterSyntax: SortFilterProxyModel.Wildcard
+                filterCaseSensitivity: Qt.CaseInsensitive
+            }
+
         }
+
+
+        ListModel {
+            id: userListModel
+            Component.onCompleted: {
+                users.updateUserListModel();
+            }
+        }
+
 
     }
 }
-

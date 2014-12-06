@@ -1,23 +1,6 @@
 var base = "http://api.locmap.net/v1/";
 var login = "http://api.locmap.net/v1/auth/login";
 
-function request(verb, endpoint) {
-    var BASE = "http://api.locmap.net/v1"
-    print('request: ' + verb + ' ' + BASE + (endpoint?'/' + endpoint:''))
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        print('xhr: on ready state change: ' + xhr.readyState)
-        if(xhr.readyState === XMLHttpRequest.DONE) {
-            print(xhr.responseText.toString());
-        }
-    }
-    xhr.open(verb, BASE + (endpoint?'/' + endpoint:''));
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    //xhr.setRequestHeader('Accept', 'application/json');
-    //var data = obj?JSON.stringify(obj):''
-    xhr.send()
-}
-
 function post(url, json, cb) {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
@@ -33,6 +16,25 @@ function post(url, json, cb) {
     req.setRequestHeader('Accept', 'application/json');
     //var data = obj?JSON.stringify(obj):''
     req.send(json)
+}
+
+function getUsers(cb) {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+        if(req.readyState === XMLHttpRequest.DONE) {
+            //var res = new Response(req.status, req.getAllResponseHeaders(), req.responseText);
+            var res = JSON.parse(req.responseText.toString())
+            print(res.users);
+            //print(req.status);
+            cb(res.users);
+        }
+    }
+
+    req.open("GET", base + "users");
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.setRequestHeader('Accept', 'application/json');
+    req.send();
 }
 
 function Response(statuscode, headers, body) {
