@@ -18,15 +18,13 @@ function post(url, json, cb) {
     req.send(json)
 }
 
+
 function getUsers(cb) {
     var req = new XMLHttpRequest();
 
     req.onreadystatechange = function() {
         if(req.readyState === XMLHttpRequest.DONE) {
-            //var res = new Response(req.status, req.getAllResponseHeaders(), req.responseText);
             var res = JSON.parse(req.responseText.toString())
-            print(res.users);
-            //print(req.status);
             cb(res.users);
         }
     }
@@ -37,9 +35,20 @@ function getUsers(cb) {
     req.send();
 }
 
-function Response(statuscode, headers, body) {
-    this.statuscode = statuscode;
-    this.headers = headers;
-    this.body = body;
+
+function deleteUser(id, cb) {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+        if(req.readyState === XMLHttpRequest.DONE) {
+            cb();
+        }
+    }
+
+    req.open("DELETE", base + "users/" + id);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.setRequestHeader('Accept', 'application/json');
+    req.send();
+
 }
 

@@ -15,9 +15,18 @@ Item {
         NetworkApi.getUsers(function(users) {
             userListModel.clear();
             users.forEach(function(e) {
-                userListModel.append({_id: e._id, username: e.username, email: e.email, created_at: e.created_at});
+                userListModel.append({_id: e._id, username: e.username, email: e.email, created_at: e.created_at, updated_at: e.updated_at});
             });
         });
+    }
+
+
+    function fillUserDetails(listModel) {
+        txtObjectId.text = listModel._id;
+        txtEmail.text = listModel.email;
+        txtUsername.text = listModel.username;
+        txtCreated.text = listModel.created_at
+        txtUpdated.text = listModel.updated_at;
     }
 
 
@@ -25,34 +34,71 @@ Item {
         id: mainLayout
         anchors.fill: parent
 
+        SplitView {
+            anchors.fill: parent
 
-        //Search components
-        GroupBox {
-            id: gridBox
-            title: "Search users"
-            Layout.fillWidth: true
+            //List controls
+            GroupBox {
+                id: gridBox
+                title: "List controls"
+                width: parent.width/3
 
-            GridLayout {
-                id: gridLayout
-                anchors.fill: parent
-                rows: 3
-                flow: GridLayout.TopToBottom
+                Column {
+                    spacing: 10
+                    Button {
+                        id: btnLoadUsers
+                        text: "Load"
+                        onClicked: updateUserListModel();
+                    }
 
-                Label { text: "ObjectID:" }
-                Label { text: "Username:" }
-                Label { text: "Email:" }
+                    Row {
+                        spacing: 10
 
-                TextField {
-                    id: idSearch
-                    Layout.fillWidth: true
-                }
-                TextField {
-                    Layout.fillWidth: true
-                }
-                TextField {
-                    Layout.fillWidth: true
+                        Label { text: "Filter:" }
+
+                        TextField {
+                            id: idSearch
+                            Layout.fillWidth: true
+                        }
+                    }
                 }
             }
+
+            //User details, update/delete
+            GroupBox {
+                id: userBox
+                title: "User details"
+                width: parent.width/1.5
+                height: 110
+                Column {
+                    spacing: 5
+
+                    GridLayout {
+                        columns: 4
+
+                        Label { text: "ObjectId" }
+                        TextField { id: txtObjectId }
+                        Label { text: "Username" }
+                        TextField { id: txtUsername }
+
+                        Label { text: "Email" }
+                        TextField { id: txtEmail }
+                        Label { text: "Created_at" }
+                        TextField { id: txtCreated }
+
+                        Label { text: "Updated_at" }
+                        TextField { id: txtUpdated }
+
+                    }
+                    Row {
+                        spacing: 10
+                        Button { text: "Update" }
+                        Button { text: "Delete" }
+                    }
+                }
+
+            }
+
         }
 
 
@@ -61,6 +107,8 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
             sortIndicatorVisible: true
+
+            onDoubleClicked: fillUserDetails(proxyModel.get(usersTable.currentRow));
 
             TableViewColumn {
                 role: "_id"
@@ -90,7 +138,7 @@ Item {
                 sortOrder: usersTable.sortIndicatorOrder
                 sortCaseSensitivity: Qt.CaseInsensitive
                 sortRole: userListModel.count > 0 ?
-                          usersTable.getColumn(usersTable.sortIndicatorColumn).role : ""
+                              usersTable.getColumn(usersTable.sortIndicatorColumn).role : ""
 
                 filterRole: ""
                 filterString: "*" + idSearch.text + "*"
@@ -103,9 +151,6 @@ Item {
 
         ListModel {
             id: userListModel
-            Component.onCompleted: {
-                users.updateUserListModel();
-            }
         }
 
 

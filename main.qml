@@ -8,7 +8,7 @@ import "content"
 ApplicationWindow {
     id: root
     visible: true
-    width: 640
+    width: 740
     height: 480
     title: "LocMap Control Panel"
 
