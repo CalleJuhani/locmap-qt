@@ -18,6 +18,21 @@ function post(url, json, cb) {
     req.send(json)
 }
 
+function getLocations(cb) {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+        if(req.readyState === XMLHttpRequest.DONE) {
+            var res = JSON.parse(req.responseText.toString())
+            cb(res.locations);
+        }
+    }
+
+    req.open("GET", base + "locations");
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.setRequestHeader('Accept', 'application/json');
+    req.send();
+}
 
 function getUsers(cb) {
     var req = new XMLHttpRequest();

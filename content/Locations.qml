@@ -3,69 +3,119 @@ import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 import SortFilterProxyModel 0.1
 import QtQuick.XmlListModel 2.0
+import "network.js" as NetworkApi
 
 Item {
-    id:users
+    id:locations
     anchors.fill: parent
     anchors.margins: 8
+
+
+    function updateLocationListModel() {
+        NetworkApi.getLocations(function(locations) {
+            locationListModel.clear();
+            locations.forEach(function(e) {
+                locationListModel.append({_id: e._id, title: e.title, description: e.description,
+                                             latitude: e.latitude, longitude: e.longitude,
+                                             created_at: e.created_at, updated_at: e.updated_at});
+            });
+        });
+    }
+
+
+    function fillLocationDetails(listModel) {
+        txtObjectId.text = listModel._id;
+        txtTitle.text = listModel.title;
+        txtDescription.text = listModel.description;
+        txtCreated.text = listModel.created_at
+        txtUpdated.text = listModel.updated_at;
+    }
+
 
     ColumnLayout {
         id: mainLayout
         anchors.fill: parent
 
-        GroupBox {
-            id: gridBox
-            title: "Search locations"
-            Layout.fillWidth: true
+        SplitView {
+            anchors.fill: parent
 
-            GridLayout {
-                id: gridLayout
-                anchors.fill: parent
-                rows: 3
-                flow: GridLayout.TopToBottom
+            //List controls
+            GroupBox {
+                id: gridBox
+                title: "List controls"
+                width: parent.width/3
 
-                Label { text: "ObjectID:" }
-                Label { text: "Title:" }
-                Label { text: "Description:" }
+                Column {
+                    spacing: 10
+                    Button {
+                        id: btnLoadLocations
+                        text: "Load"
+                        onClicked: updateLocationListModel();
+                    }
 
-                TextField {
-                 id: idSearch
-                 Layout.fillWidth: true
-                }
-                TextField {
-                    Layout.fillWidth: true
-                }
-                TextField {
-                    Layout.fillWidth: true
+                    Row {
+                        spacing: 10
+
+                        Label { text: "Filter:" }
+
+                        TextField {
+                            id: idSearch
+                            Layout.fillWidth: true
+                        }
+                    }
                 }
             }
+
+            //Location details, update/delete
+            GroupBox {
+                id: locationBox
+                title: "Location details"
+                width: parent.width/1.5
+                height: 110
+                Column {
+                    spacing: 5
+
+                    GridLayout {
+                        columns: 4
+
+                        Label { text: "ObjectId" }
+                        TextField { id: txtObjectId }
+                        Label { text: "Title" }
+                        TextField { id: txtTitle }
+
+                        Label { text: "Description" }
+                        TextField { id: txtDescription }
+                        Label { text: "Latitude" }
+                        TextField { id: txtLatitude }
+
+                        Label { text: "Longitude" }
+                        TextField { id: txtLongitude }
+
+                        Label { text: "Created_at" }
+                        TextField { id: txtCreated }
+                        Label { text: "Updated_at" }
+                        TextField { id: txtUpdated }
+
+                    }
+                    Row {
+                        spacing: 10
+                        Button { text: "Update" }
+                        Button { text: "Delete" }
+                    }
+                }
+
+            }
+
         }
 
-        JSONListModel {
-            id: jsonModel1
-            source: "http://api.locmap.net/v1/locations"
-            query: "$.[*]"
-        }
 
         TableView {
-            id: usersTable
+            id: locationsTable
             Layout.fillHeight: true
             Layout.fillWidth: true
             sortIndicatorVisible: true
 
-            model: SortFilterProxyModel {
-                id: proxyModel
-                source: jsonModel1.model.count > 0 ? jsonModel1.model : null
-
-                sortOrder: usersTable.sortIndicatorOrder
-                sortCaseSensitivity: Qt.CaseInsensitive
-                sortRole: jsonModel1.model.count > 0 ?
-                          usersTable.getColumn(usersTable.sortIndicatorColumn).role : ""
-
-                filterString: "*" + idSearch.text + "*"
-                filterSyntax: SortFilterProxyModel.Wildcard
-                filterCaseSensitivity: Qt.CaseInsensitive
-            }
+            onDoubleClicked: fillLocationDetails(proxyModel.get(locationsTable.currentRow));
 
             TableViewColumn {
                 role: "_id"
@@ -91,7 +141,6 @@ Item {
                 role: "owners"
                 title: "Owners"
             }
-
             TableViewColumn {
                 role: "created_at"
                 title: "Created"
@@ -100,8 +149,29 @@ Item {
                 role: "updated_at"
                 title: "Updated"
             }
+
+            model: SortFilterProxyModel {
+                id: proxyModel
+                source: locationListModel.count > 0 ? locationListModel : null
+
+                sortOrder: locationsTable.sortIndicatorOrder
+                sortCaseSensitivity: Qt.CaseInsensitive
+                sortRole: locationListModel.count > 0 ?
+                              locationsTable.getColumn(locationsTable.sortIndicatorColumn).role : ""
+
+                filterRole: ""
+                filterString: "*" + idSearch.text + "*"
+                filterSyntax: SortFilterProxyModel.Wildcard
+                filterCaseSensitivity: Qt.CaseInsensitive
+            }
+
         }
+
+
+        ListModel {
+            id: locationListModel
+        }
+
 
     }
 }
-

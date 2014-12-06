@@ -42,7 +42,7 @@ Item {
             JSONListModel {
                 id: imagesModel
                 source: "http://api.locmap.net/v1/images"
-                query: "$.[*]"
+                query: "$.images[*]"
             }
 
             TableView {
