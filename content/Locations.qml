@@ -23,11 +23,57 @@ Item {
     }
 
 
+    function deleteLocation() {
+        if (txtObjectId.text) {
+            NetworkApi.deleteLocation(txtObjectId.text, token, function(res) {
+                txtStatus.text = res;
+                emptyLocationDetails();
+            });
+        }
+    }
+
+
+    function updateLocation() {
+        if (!txtObjectId.text)
+            return;
+
+        var location = {
+            title: txtTitle.text,
+            description: txtDescription.text,
+            latitude: Number(txtLatitude.text),
+            longitude: Number(txtLongitude.text)
+        }
+
+        NetworkApi.putLocation(txtObjectId.text, JSON.stringify(location), token, function(status, message) {
+            if (status === 200) {
+                txtStatus.text = "Updated: " + txtObjectId.text;
+                emptyLocationDetails();
+            } else {
+                txtStatus.text = "Message from server: " + message;
+            }
+        });
+
+    }
+
+
+    function emptyLocationDetails() {
+        txtObjectId.text = "";
+        txtTitle.text = "";
+        txtDescription.text = "";
+        txtLatitude.text = "";
+        txtLongitude.text = "";
+        txtCreated.text = "";
+        txtUpdated.text = "";
+    }
+
+
     function fillLocationDetails(listModel) {
         txtObjectId.text = listModel._id;
         txtTitle.text = listModel.title;
         txtDescription.text = listModel.description;
-        txtCreated.text = listModel.created_at
+        txtLatitude.text = listModel.latitude;
+        txtLongitude.text = listModel.longitude;
+        txtCreated.text = listModel.created_at;
         txtUpdated.text = listModel.updated_at;
     }
 
@@ -71,7 +117,7 @@ Item {
                 id: locationBox
                 title: "Location details"
                 width: parent.width/1.5
-                height: 110
+                height: 135
                 Column {
                     spacing: 5
 
@@ -99,8 +145,14 @@ Item {
                     }
                     Row {
                         spacing: 10
-                        Button { text: "Update" }
-                        Button { text: "Delete" }
+                        Button {
+                            text: "Update"
+                            onClicked: updateLocation();
+                        }
+                        Button {
+                            text: "Delete"
+                            onClicked: deleteLocation();
+                        }
                     }
                 }
 

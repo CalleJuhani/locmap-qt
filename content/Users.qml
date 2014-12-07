@@ -12,7 +12,7 @@ Item {
 
 
     function updateUserListModel() {
-        NetworkApi.getUsers(function(users) {
+        NetworkApi.getUsers(token, function(users) {
             userListModel.clear();
             users.forEach(function(e) {
                 userListModel.append({_id: e._id, username: e.username, email: e.email, created_at: e.created_at, updated_at: e.updated_at});

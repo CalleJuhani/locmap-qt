@@ -38,7 +38,7 @@ ApplicationWindow {
 
         Tab {
             id: usersPage
-            enabled: true
+            enabled: false
             title: "Users"
             Users {}
         }
@@ -50,6 +50,15 @@ ApplicationWindow {
             Images {}
         }
 
+    }
+
+    statusBar: StatusBar {
+        RowLayout {
+            Label {
+                id: txtStatus
+                text: ""
+            }
+        }
     }
 
 

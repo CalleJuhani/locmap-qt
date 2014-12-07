@@ -55,16 +55,16 @@ Item {
                         }
 
                         print(JSON.stringify(credentials));
-                        NetworkApi.post("http://api.locmap.net/v1/auth/login", JSON.stringify(credentials), function(res) {
+                        NetworkApi.postLogin(JSON.stringify(credentials), function(res) {
                             if (res){
                                 token = res;
                                 print(token);
+                                txtStatus.text = "Logged in"
                                 //activate tabs
                                 locationsPage.enabled = true;
                                 usersPage.enabled = true;
                                 imagesPage.enabled = true;
                             }
-
                         });
                     }
 
