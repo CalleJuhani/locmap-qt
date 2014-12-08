@@ -16,7 +16,7 @@ ApplicationWindow {
     //Custom properties for application window
     //Used as "global" variables
     property string token: "";
-
+    property string apiBase: "http://api.locmap.net/v1/"
 
     //TabView that forms the main layout of the program
     TabView {

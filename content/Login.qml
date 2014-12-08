@@ -14,7 +14,7 @@ Item {
         width: parent.width
 
         GroupBox {
-            id: gridBox
+            id: loginBox
             title: "Log In"
             Layout.fillWidth: true
 
@@ -53,7 +53,7 @@ Item {
                             email: txtEmail.text,
                             password: txtPassword.text
                         }
-
+                        NetworkApi.base = apiBase;
                         print(JSON.stringify(credentials));
                         NetworkApi.postLogin(JSON.stringify(credentials), function(res) {
                             if (res){
@@ -74,6 +74,30 @@ Item {
 
         }
 
+        GroupBox {
+            id: settingsBox
+            title: "Settings"
+            Layout.fillWidth: true
+
+            Column {
+                Label {
+                    text: "API address"
+                }
+
+                TextField {
+                    text: apiBase
+                    width: 200
+                }
+
+                Button {
+                    text: "Update"
+                }
+
+            }
+
+
+
+        }
 
     }
 

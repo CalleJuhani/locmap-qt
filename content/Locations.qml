@@ -19,6 +19,7 @@ Item {
                                              latitude: e.latitude, longitude: e.longitude,
                                              created_at: e.created_at, updated_at: e.updated_at});
             });
+            txtStatus.text = "Loaded locations"
         });
     }
 
