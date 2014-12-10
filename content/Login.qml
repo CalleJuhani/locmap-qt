@@ -55,18 +55,15 @@ Item {
                                 password: txtPassword.text
                             }
                             NetworkApi.base = apiBase;
-                            print(JSON.stringify(credentials));
                             NetworkApi.postLogin(JSON.stringify(credentials), function(res, role, message) {
 
                                 // if login ok, check if role is Admin
                                 if (res) {
-                                    print(role);
                                     if (role !== "Admin") {
                                         txtStatus.text = "Only admin users allowed to log in";
                                         return;
                                     }
                                     token = res;
-                                    print(token);
                                     txtStatus.text = "Logged in"
 
                                     //activate tabs
@@ -107,7 +104,7 @@ Item {
 
         }
 
-        GroupBox {
+        /*GroupBox {
             id: settingsBox
             title: "Settings"
             Layout.fillWidth: true
@@ -130,7 +127,7 @@ Item {
 
 
 
-        }
+        }*/
 
     }
 

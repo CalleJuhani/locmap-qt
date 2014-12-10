@@ -170,7 +170,6 @@ function postLogOut(cb) {
 
     req.onreadystatechange = function() {
         if(req.readyState === XMLHttpRequest.DONE) {
-            print(req.responseText.toString());
             cb();
         }
     }
