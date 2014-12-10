@@ -81,7 +81,6 @@ function getUsers(token, cb) {
     req.setRequestHeader('Content-Type', 'application/json');
     req.setRequestHeader('Accept', 'application/json');
     req.setRequestHeader('Authorization', 'Bearer ' + token);
-    print('Bearer ' + token);
     req.send();
 }
 
@@ -91,7 +90,8 @@ function deleteUser(id, token, cb) {
 
     req.onreadystatechange = function() {
         if(req.readyState === XMLHttpRequest.DONE) {
-            cb();
+            var res = JSON.parse(req.responseText.toString())
+            cb(res.message);
         }
     }
 
@@ -136,5 +136,25 @@ function deleteImage(id, token, cb) {
     req.setRequestHeader('Accept', 'application/json');
     req.setRequestHeader('Authorization', 'Bearer ' + token);
     req.send();
+}
+
+function putUser(id, json, token, cb) {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+        if(req.readyState === XMLHttpRequest.DONE) {
+            var res = "";
+            if (req.status === 400) {
+                res = JSON.parse(req.responseText.toString()).message;
+            }
+            cb(req.status, res);
+        }
+    }
+
+    req.open("PUT", base + "users/" + id);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.setRequestHeader('Accept', 'application/json');
+    req.setRequestHeader('Authorization', 'Bearer ' + token);
+    req.send(json);
 }
 
