@@ -15,18 +15,57 @@ Item {
         NetworkApi.getUsers(token, function(users) {
             userListModel.clear();
             users.forEach(function(e) {
-                userListModel.append({_id: e._id, username: e.username, email: e.email, created_at: e.created_at, updated_at: e.updated_at});
+                userListModel.append({_id: e._id, username: e.username, email: e.email,
+                                         role: e.role, created_at: e.created_at, updated_at: e.updated_at});
             });
         });
     }
-
 
     function fillUserDetails(listModel) {
         txtObjectId.text = listModel._id;
         txtEmail.text = listModel.email;
         txtUsername.text = listModel.username;
+        txtRole.text = listModel.role;
         txtCreated.text = listModel.created_at
         txtUpdated.text = listModel.updated_at;
+    }
+
+    function emptyUserDetails(listModel) {
+        txtObjectId.text = "";
+        txtEmail.text = "";
+        txtUsername.text = "";
+        txtRole.text = "";
+        txtCreated.text = "";
+        txtUpdated.text = "";
+    }
+
+    function deleteUser() {
+        if (txtObjectId.text) {
+            NetworkApi.deleteUser(txtObjectId.text, token, function(res) {
+                txtStatus.text = res;
+                emptyUserDetails();
+            });
+        }
+    }
+
+    function updateUser() {
+        if (!txtObjectId.text)
+            return;
+
+        var user = {
+            username: txtUsername.text,
+            email: txtEmail.text,
+            role: txtRole.text
+        }
+
+        NetworkApi.putUser(txtObjectId.text, JSON.stringify(user), token, function(status, message) {
+            if (status === 200) {
+                txtStatus.text = "Updated: " + txtObjectId.text;
+                emptyUserDetails();
+            } else {
+                txtStatus.text = "Message from server: " + message;
+            }
+        });
     }
 
 
@@ -83,6 +122,10 @@ Item {
 
                         Label { text: "Email" }
                         TextField { id: txtEmail }
+
+                        Label { text: "Role" }
+                        TextField { id: txtRole }
+
                         Label { text: "Created_at" }
                         TextField { id: txtCreated }
 
@@ -92,8 +135,14 @@ Item {
                     }
                     Row {
                         spacing: 10
-                        Button { text: "Update" }
-                        Button { text: "Delete" }
+                        Button {
+                            text: "Update"
+                            onClicked: updateUser();
+                        }
+                        Button {
+                            text: "Delete"
+                            onClicked: deleteUser();
+                        }
                     }
                 }
 
@@ -121,6 +170,10 @@ Item {
             TableViewColumn {
                 role: "email"
                 title: "Email"
+            }
+            TableViewColumn {
+                role: "role"
+                title: "role"
             }
             TableViewColumn {
                 role: "created_at"

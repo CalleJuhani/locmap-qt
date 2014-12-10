@@ -4,7 +4,6 @@ QT += qml quick widgets
 QT += positioning
 
 SOURCES += main.cpp \
-    network.cpp \
     sortfilterproxymodel.cpp
 
 RESOURCES += qml.qrc
@@ -16,5 +15,4 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    network.h \
     sortfilterproxymodel.h
