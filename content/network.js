@@ -4,7 +4,13 @@ function postLogin(credentials, cb) {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
         if(req.readyState === XMLHttpRequest.DONE) {
-            cb(req.getResponseHeader("x-access-token"));
+            if (req.status !== 200) {
+                cb(null, null, JSON.parse(req.responseText.toString()).message)
+            }
+            else {
+                var role = JSON.parse(req.responseText.toString()).role;
+                cb(req.getResponseHeader("x-access-token"), role);
+            }
         }
     }
     req.open("POST", base + "auth/login");
@@ -85,7 +91,6 @@ function getUsers(token, cb) {
     req.send();
 }
 
-
 function deleteUser(id, cb) {
     var req = new XMLHttpRequest();
 
@@ -102,3 +107,19 @@ function deleteUser(id, cb) {
 
 }
 
+function postLogOut(cb) {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+        if(req.readyState === XMLHttpRequest.DONE) {
+            print(req.responseText.toString());
+            cb();
+        }
+    }
+
+    req.open("POST", base + "auth/logout/");
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.setRequestHeader('Accept', 'application/json');
+    req.setRequestHeader('Authorization', 'Bearer ' + token);
+    req.send();
+}
