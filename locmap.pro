@@ -1,7 +1,6 @@
 TEMPLATE = app
 
 QT += qml quick widgets
-QT += positioning
 
 SOURCES += main.cpp \
     sortfilterproxymodel.cpp

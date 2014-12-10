@@ -1,8 +1,7 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.0
 import SortFilterProxyModel 0.1
-import QtQuick.XmlListModel 2.0
 import "network.js" as NetworkApi
 
 Item {
@@ -123,7 +122,7 @@ Item {
                     spacing: 5
 
                     GridLayout {
-                        columns: 4
+                        columns: 6
 
                         Label { text: "ObjectId" }
                         TextField { id: txtObjectId }

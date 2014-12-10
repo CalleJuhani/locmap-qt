@@ -1,15 +1,13 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
-import QtPositioning 5.2
 import QtQuick.Layouts 1.0
-import QtQuick.Dialogs 1.2
 import "content"
 
 ApplicationWindow {
     id: root
     visible: true
-    width: 740
-    height: 480
+    width: 900
+    height: 500
     title: "LocMap Control Panel"
 
 
